@@ -1,10 +1,10 @@
 #!/usr/bin/env node
-const readline = require("readline");
+const readline = require("readline"); // moduł Node.js potrzebny do działania przez linię poleceń
 Number.prototype.map = function(in_min, in_max, out_min, out_max) {
     return Math.round(
         ((this - in_min) * (out_max - out_min)) / (in_max - in_min) + out_min
     );
-};
+}; // przypisanie do prototypu zmiennych typu Number funkcji mapującej liczbę z jednego zakresu do drugiego
 function closestPowerOf2(n) {
     if (n >= 2 ** 32) {
         return 63 - clz64(BigInt(n)); // Jeśli liczba ma więcej niż 32 bity, Math.clz32 nie wystarczy i trzeba sięgnąć po metodę dla BigIntów
@@ -13,6 +13,7 @@ function closestPowerOf2(n) {
     return 31 - Math.clz32(n);
 }
 function clz64(x) {
+    // źródło: https://codegolf.stackexchange.com/a/177272
     return x < 0 ? 0 : x ? clz64(x / 2n) - 1 : 64;
 }
 function spacer(A, B) {
@@ -49,17 +50,19 @@ function spacer(A, B) {
 
 module.exports = {
     spa: spacer
-};
+}; // eksport funkcji pozwala łatwo zaimportować ją z innego pliku i tam z niej korzystać
 
+// Kod odpowiedzialny za CLI
 if (!!process && !!process.argv && process.argv > 2) {
+    // Jeśli zostały podane jakieś argumenty, wykonaj polecenia według nich
     const [, , ...args] = process.argv;
     for (let i = 1; i < args[0] * 2; i += 2) {
         console.log(spacer(args[i], args[i + 1]));
     }
 } else {
+    // Jeśli nie zostały podane argumenty, czekaj na ich podanie na stdin
     const rl = readline.createInterface({
-        input: process.stdin,
-        output: process.stdout
+        input: process.stdin
     });
     const getLine = (function() {
         const getLineGen = (async function*() {
